@@ -20,11 +20,11 @@
       <Separator layoutY="38.0" prefHeight="3.0" prefWidth="600.0" />
       <Button layoutX="488.0" layoutY="6.0" mnemonicParsing="false" text="New Student" />
       <Button layoutX="374.0" layoutY="6.0" mnemonicParsing="false" text="Back to Home" />
-      <TextField layoutX="14.0" layoutY="51.0" prefHeight="28.0" prefWidth="142.0" promptText="Name" />
-      <TextField layoutX="169.0" layoutY="51.0" prefHeight="28.0" prefWidth="142.0" promptText="Address" />
-      <TextField layoutX="325.0" layoutY="51.0" prefHeight="28.0" prefWidth="56.0" promptText="Age" />
-      <TextField layoutX="397.0" layoutY="51.0" prefHeight="28.0" prefWidth="198.0" promptText="Email" />
-      <Button layoutX="488.0" layoutY="90.0" mnemonicParsing="false" text="Save Student" />
+      <TextField fx:id="txtName" layoutX="14.0" layoutY="51.0" prefHeight="28.0" prefWidth="142.0" promptText="Name" />
+      <TextField fx:id="txtAddress" layoutX="169.0" layoutY="51.0" prefHeight="28.0" prefWidth="142.0" promptText="Address" />
+      <TextField fx:id="txtAge" layoutX="325.0" layoutY="51.0" prefHeight="28.0" prefWidth="56.0" promptText="Age" />
+      <TextField fx:id="txtEmail" layoutX="397.0" layoutY="51.0" prefHeight="28.0" prefWidth="198.0" promptText="Email" />
+      <Button layoutX="488.0" layoutY="90.0" mnemonicParsing="false" onAction="#saveStudentOnAction" text="Save Student" />
       <Separator layoutY="130.0" prefHeight="3.0" prefWidth="600.0" />
       <TextField layoutX="12.0" layoutY="136.0" prefHeight="28.0" prefWidth="578.0" promptText="Search Here" />
       <TableView layoutX="14.0" layoutY="170.0" prefHeight="200.0" prefWidth="570.0">
