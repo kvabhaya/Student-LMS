@@ -29,6 +29,7 @@ public class StudentFormController {
             boolean isSaved = databaseAccessCode.saveStudent(student);
             if(isSaved){
                 new Alert(Alert.AlertType.INFORMATION,"Student has been saved...", ButtonType.CLOSE).show();
+                clearFields();
             }else{
                 new Alert(Alert.AlertType.WARNING,"Try again...", ButtonType.CLOSE).show();
             }
@@ -36,5 +37,12 @@ public class StudentFormController {
         }catch(SQLException | ClassNotFoundException e){
             new Alert(Alert.AlertType.ERROR,e.getMessage(), ButtonType.CLOSE).show();
         }
+    }
+
+    private void clearFields() {
+        txtName.clear();
+        txtAddress.clear();
+        txtAge.clear();
+        txtEmail.clear();
     }
 }
