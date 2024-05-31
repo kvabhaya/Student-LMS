@@ -16,9 +16,9 @@ public class LoginFormController {
     public void openDashboardOnAction(ActionEvent actionEvent) throws IOException {
         URL resource = getClass().getResource("../view/DashboardForm.fxml");
         Stage stage = (Stage) context.getScene().getWindow();
+        stage.centerOnScreen();
         stage.setScene(new Scene(FXMLLoader.load(resource)));
         stage.setTitle("Dashboard");
-        stage.centerOnScreen();
 
     }
 }
