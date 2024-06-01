@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -30,6 +31,11 @@ public class StudentFormController {
     private String searchText="";
 
     public void initialize(){
+        colName.setCellValueFactory(new PropertyValueFactory<>("studentName"));
+        colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        colAge.setCellValueFactory(new PropertyValueFactory<>("age"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colOption.setCellValueFactory(new PropertyValueFactory<>("bar"));
         loadAllStudents();
     }
 
