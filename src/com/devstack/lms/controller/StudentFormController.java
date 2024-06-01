@@ -2,12 +2,15 @@ package com.devstack.lms.controller;
 
 import com.devstack.lms.db.DatabaseAccessCode;
 import com.devstack.lms.model.Student;
+import com.devstack.lms.view.TM.StudentTM;
+import javafx.beans.value.ObservableLongValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 public class StudentFormController {
@@ -15,6 +18,49 @@ public class StudentFormController {
     public TextField txtAddress;
     public TextField txtAge;
     public TextField txtEmail;
+
+
+    public TableView<StudentTM> tblStudents;
+    public TableColumn<StudentTM,String> colName;
+    public TableColumn<StudentTM,String>  colAddress;
+    public TableColumn<StudentTM,Integer>  colAge;
+    public TableColumn<StudentTM,String>  colEmail;
+    public TableColumn<StudentTM,ButtonBar>  colOption;
+
+    private String searchText="";
+
+    public void initialize(){
+        loadAllStudents();
+    }
+
+    private void loadAllStudents() {
+        ObservableList<StudentTM> tmObservableList = FXCollections.observableArrayList();
+        try{
+            DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
+            List<Student> allStudents = databaseAccessCode.findAllStudents(searchText);
+
+            for(Student s:allStudents){
+
+                ButtonBar bar = new ButtonBar();
+                Button deleteButton = new Button("Delete");
+                Button updateButton = new Button("Update");
+                bar.getButtons().addAll(deleteButton,updateButton);
+
+                StudentTM tm = new StudentTM(
+                        s.getStudentId(),
+                        s.getStudentName(),
+                        s.getAddress(),
+                        s.getEmail(),
+                        s.getAge(),
+                        bar
+                );
+                tmObservableList.add(tm);
+            }
+            tblStudents.setItems(tmObservableList);
+        }catch(SQLException | ClassNotFoundException e){
+            new Alert(Alert.AlertType.ERROR, e.getMessage(),ButtonType.CLOSE).show();;
+        }
+    }
 
     public void saveStudentOnAction(ActionEvent actionEvent) {
         try{
