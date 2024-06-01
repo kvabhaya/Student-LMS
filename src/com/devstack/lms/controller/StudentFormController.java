@@ -76,6 +76,7 @@ public class StudentFormController {
             if(isSaved){
                 new Alert(Alert.AlertType.INFORMATION,"Student has been saved...", ButtonType.CLOSE).show();
                 clearFields();
+                loadAllStudents();
             }else{
                 new Alert(Alert.AlertType.WARNING,"Try again...", ButtonType.CLOSE).show();
             }
