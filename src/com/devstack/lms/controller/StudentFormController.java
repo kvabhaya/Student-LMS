@@ -7,9 +7,15 @@ import javafx.beans.value.ObservableLongValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -29,8 +35,11 @@ public class StudentFormController {
     public TableColumn<StudentTM,String>  colEmail;
     public TableColumn<StudentTM,ButtonBar>  colOption;
     public TextField txtSearch;
+    public Button btnSave;
+    public AnchorPane context;
 
     private String searchText="";
+    private Student selectedStudent=null;
 
     public void initialize(){
         colName.setCellValueFactory(new PropertyValueFactory<>("studentName"));
@@ -89,6 +98,16 @@ public class StudentFormController {
                     }
                 });
 
+                updateButton.setOnAction(event -> {
+                    btnSave.setText("Update Student");
+                    selectedStudent = s;
+
+                    txtName.setText(s.getStudentName());
+                    txtAge.setText(String.valueOf(s.getAge()));
+                    txtEmail.setText(s.getEmail());
+                    txtAddress.setText(s.getAddress());
+                });
+
                 tmObservableList.add(tm);
             }
             tblStudents.setItems(tmObservableList);
@@ -98,27 +117,57 @@ public class StudentFormController {
     }
 
     public void saveStudentOnAction(ActionEvent actionEvent) {
-        try{
-            Student student = new Student(
-                    UUID.randomUUID().toString(),
-                    txtName.getText().trim(),
-                    txtAddress.getText().trim(),
-                    txtEmail.getText().toLowerCase().trim(),
-                    Integer.parseInt(txtAge.getText())
-            );
-            DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
-            boolean isSaved = databaseAccessCode.saveStudent(student);
-            if(isSaved){
-                new Alert(Alert.AlertType.INFORMATION,"Student has been saved...", ButtonType.CLOSE).show();
-                clearFields();
-                loadAllStudents();
-            }else{
-                new Alert(Alert.AlertType.WARNING,"Try again...", ButtonType.CLOSE).show();
-            }
+        if(btnSave.getText().equalsIgnoreCase("Save Student")){
+            try{
+                Student student = new Student(
+                        UUID.randomUUID().toString(),
+                        txtName.getText().trim(),
+                        txtAddress.getText().trim(),
+                        txtEmail.getText().toLowerCase().trim(),
+                        Integer.parseInt(txtAge.getText())
+                );
+                DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
+                boolean isSaved = databaseAccessCode.saveStudent(student);
+                if(isSaved){
+                    new Alert(Alert.AlertType.INFORMATION,"Student has been saved...", ButtonType.CLOSE).show();
+                    clearFields();
+                    loadAllStudents();
+                }else{
+                    new Alert(Alert.AlertType.WARNING,"Try again...", ButtonType.CLOSE).show();
+                }
 
-        }catch(SQLException | ClassNotFoundException e){
-            new Alert(Alert.AlertType.ERROR,e.getMessage(), ButtonType.CLOSE).show();
+            }catch(SQLException | ClassNotFoundException e){
+                new Alert(Alert.AlertType.ERROR,e.getMessage(), ButtonType.CLOSE).show();
+            }
+        }else{
+            if(selectedStudent != null){
+                try{
+                    Student student = new Student(
+                            selectedStudent.getStudentId(),
+                            txtName.getText().trim(),
+                            txtAddress.getText().trim(),
+                            txtEmail.getText().toLowerCase().trim(),
+                            Integer.parseInt(txtAge.getText())
+                    );
+                    DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
+                    boolean isSaved = databaseAccessCode.updateStudent(student);
+                    if(isSaved){
+                        new Alert(Alert.AlertType.INFORMATION,"Student has been updated...", ButtonType.CLOSE).show();
+                        clearFields();
+                        loadAllStudents();
+                        btnSave.setText("Save Student");
+                    }else{
+                        new Alert(Alert.AlertType.WARNING,"Try again...", ButtonType.CLOSE).show();
+                    }
+
+                }catch(SQLException | ClassNotFoundException e){
+                    new Alert(Alert.AlertType.ERROR,e.getMessage(), ButtonType.CLOSE).show();
+                }
+            }else{
+                new Alert(Alert.AlertType.ERROR,"Select a student", ButtonType.CLOSE).show();
+            }
         }
+
     }
 
     private void clearFields() {
@@ -126,5 +175,19 @@ public class StudentFormController {
         txtAddress.clear();
         txtAge.clear();
         txtEmail.clear();
+    }
+
+    public void btnNewStudentOnAction(ActionEvent actionEvent) {
+        btnSave.setText("Save Student");
+        clearFields();
+        selectedStudent=null;
+    }
+
+    public void btnBachToHomeOnAction(ActionEvent actionEvent) throws IOException {
+        URL resource = getClass().getResource("../view/DashboardForm.fxml");
+        Stage stage = (Stage) context.getScene().getWindow();
+        stage.centerOnScreen();
+        stage.setScene(new Scene(FXMLLoader.load(resource)));
+        stage.setTitle("Dashboard Form");
     }
 }
