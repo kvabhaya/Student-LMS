@@ -12,6 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class StudentFormController {
@@ -66,11 +67,33 @@ public class StudentFormController {
                         s.getAge(),
                         bar
                 );
+
+                deleteButton.setOnAction(event -> {
+
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure?", ButtonType.NO, ButtonType.YES);
+                    Optional<ButtonType> buttonType = alert.showAndWait();
+
+                    if(buttonType.get()==ButtonType.YES){
+                        try{
+                            DatabaseAccessCode dbAccessCode = new DatabaseAccessCode();
+                            boolean isDeleted = dbAccessCode.deleteStudent(tm.getStudentId());
+                            if(isDeleted){
+                                new Alert(Alert.AlertType.INFORMATION,"Student has been deleted...", ButtonType.CLOSE).show();
+                                loadAllStudents();
+                            }else{
+                                new Alert(Alert.AlertType.WARNING,"Something went wrong. Try again...", ButtonType.CLOSE).show();
+                            }
+                        }catch(SQLException | ClassNotFoundException e){
+                            new Alert(Alert.AlertType.ERROR, e.getMessage(),ButtonType.CLOSE).show();
+                        }
+                    }
+                });
+
                 tmObservableList.add(tm);
             }
             tblStudents.setItems(tmObservableList);
         }catch(SQLException | ClassNotFoundException e){
-            new Alert(Alert.AlertType.ERROR, e.getMessage(),ButtonType.CLOSE).show();;
+            new Alert(Alert.AlertType.ERROR, e.getMessage(),ButtonType.CLOSE).show();
         }
     }
 
