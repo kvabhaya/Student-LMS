@@ -27,6 +27,7 @@ public class StudentFormController {
     public TableColumn<StudentTM,Integer>  colAge;
     public TableColumn<StudentTM,String>  colEmail;
     public TableColumn<StudentTM,ButtonBar>  colOption;
+    public TextField txtSearch;
 
     private String searchText="";
 
@@ -37,6 +38,11 @@ public class StudentFormController {
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         colOption.setCellValueFactory(new PropertyValueFactory<>("bar"));
         loadAllStudents();
+
+        txtSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchText = newValue;
+            loadAllStudents();
+        });
     }
 
     private void loadAllStudents() {
