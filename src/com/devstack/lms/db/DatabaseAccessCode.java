@@ -117,4 +117,17 @@ public class DatabaseAccessCode {
         }
         return false;
     }
+
+    public boolean login(String username, String password) throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
+        String sql = "SELECT * FROM user WHERE username = '" + username +"' AND password = '" + password +"'";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        if(resultSet.next()){
+            return true;
+        }
+        return false;
+    }
 }
