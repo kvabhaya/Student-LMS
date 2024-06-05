@@ -1,5 +1,6 @@
 package com.devstack.lms.db;
 
+import com.devstack.lms.model.Course;
 import com.devstack.lms.model.Student;
 import com.devstack.lms.model.User;
 
@@ -129,5 +130,60 @@ public class DatabaseAccessCode {
             return true;
         }
         return false;
+    }
+
+    //course
+    public boolean saveCourse(Course course) throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
+        String sql = "INSERT INTO course VALUES (?,?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, course.getCourseId());
+        preparedStatement.setString(2, course.getCourseName());
+        preparedStatement.setDouble(3, course.getFee());
+
+
+        int affectedRowCount = preparedStatement.executeUpdate();
+        if(affectedRowCount>0){
+            return true;
+        }
+        return false;
+    }
+
+    public List<Course> findAllCourses() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
+        String sql = "SELECT * FROM course";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<Course> courseList = new ArrayList<>();
+        while(resultSet.next()){
+            courseList.add(new Course(
+                    resultSet.getString(1),
+                    resultSet.getString(2),
+                    resultSet.getDouble(3)
+            ));
+        }
+        return courseList;
+    }
+
+    public Course findCourse(String course_id) throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
+        String sql = "SELECT * FROM course WHERE course_id=?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1,course_id);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        if(resultSet.next()){
+            return new Course(
+                    resultSet.getString(1),
+                    resultSet.getString(2),
+                    resultSet.getDouble(3)
+            );
+        }
+        return null;
     }
 }

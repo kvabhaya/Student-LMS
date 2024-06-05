@@ -19,4 +19,19 @@ public class DashboardFormController {
         stage.setScene(new Scene(FXMLLoader.load(resource)));
         stage.setTitle("Student Form");
     }
+
+    public void btnOpenCourseFormOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("CourseForm");
+    }
+
+    public void btnOpenRegistrationOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("RegisterForm");
+    }
+    private void setUi(String location) throws IOException {
+        URL resource = getClass().getResource("../view/"+location+".fxml");
+        Stage stage = (Stage) context.getScene().getWindow();
+        stage.centerOnScreen();
+        stage.setScene(new Scene(FXMLLoader.load(resource)));
+        stage.setTitle(location);
+    }
 }

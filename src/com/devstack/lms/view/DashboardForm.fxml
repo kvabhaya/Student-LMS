@@ -13,5 +13,8 @@
          </font>
       </Label>
       <Button layoutX="28.0" layoutY="71.0" mnemonicParsing="false" onAction="#btnOpenStudentFormOnAction" prefHeight="85.0" prefWidth="152.0" text="Student Management" />
+      <Button layoutX="197.0" layoutY="71.0" mnemonicParsing="false" onAction="#btnOpenCourseFormOnAction" prefHeight="85.0" prefWidth="152.0" text="Course Management" />
+      <Button layoutX="369.0" layoutY="71.0" mnemonicParsing="false" onAction="#btnOpenRegistrationOnAction" prefHeight="85.0" prefWidth="152.0" text="New Registration" />
+      <Button layoutX="538.0" layoutY="71.0" mnemonicParsing="false" onAction="#btnOpenCourseFormOnAction" prefHeight="85.0" prefWidth="152.0" text="All Registrations" />
    </children>
 </AnchorPane>

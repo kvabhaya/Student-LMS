@@ -25,3 +25,16 @@ CREATE TABLE IF NOT EXISTS course
     fee DECIMAL(10,2),
     CONSTRAINT PRIMARY KEY (course_id)
 );
+
+CREATE TABLE IF NOT EXISTS registration
+(
+    registration_id VARCHAR(45),
+    registered_date DATE,
+    nic LONGBLOB,
+    paymentType ENUM('CASH','CARD'),
+    student VARCHAR(45),
+    course VARCHAR(45),
+    CONSTRAINT PRIMARY KEY (registration_id, student,course),
+    CONSTRAINT FOREIGN KEY (student) REFERENCES student(student_id),
+    CONSTRAINT FOREIGN KEY (course) REFERENCES course(course_id)
+);
