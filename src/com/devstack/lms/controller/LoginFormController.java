@@ -29,26 +29,25 @@ public class LoginFormController {
             );
             if(islogedIn){
                 System.out.println("Logged");
+                setUi("DashboardForm");
             }else{
                 System.out.println("Try again..");
             }
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
-        
-//        URL resource = getClass().getResource("../view/DashboardForm.fxml");
-//        Stage stage = (Stage) context.getScene().getWindow();
-//        stage.centerOnScreen();
-//        stage.setScene(new Scene(FXMLLoader.load(resource)));
-//        stage.setTitle("Dashboard");
 
     }
 
     public void navigateToRegisterFormOnAction(ActionEvent actionEvent) throws IOException {
-        URL resource = getClass().getResource("../view/SignupForm.fxml");
+        setUi("SignupForm");
+    }
+
+    private void setUi(String location) throws IOException {
+        URL resource = getClass().getResource("../view/"+location+".fxml");
         Stage stage = (Stage) context.getScene().getWindow();
         stage.centerOnScreen();
         stage.setScene(new Scene(FXMLLoader.load(resource)));
-        stage.setTitle("Signup");
+        stage.setTitle(location);
     }
 }

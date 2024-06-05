@@ -32,11 +32,7 @@ public class SignupFormController {
             boolean isSaved = databaseAccessCode.signUp(user);
             if (isSaved){
                 new Alert(Alert.AlertType.INFORMATION,"Signup Done").show();
-                URL resource = getClass().getResource("../view/LoginForm.fxml");
-                Stage stage = (Stage) context.getScene().getWindow();
-                stage.centerOnScreen();
-                stage.setScene(new Scene(FXMLLoader.load(resource)));
-                stage.setTitle("Login");
+                setUi("LoginForm");
             }else{
                 new Alert(Alert.AlertType.WARNING,"Something went wrong.Try again.").show();
 
@@ -48,10 +44,13 @@ public class SignupFormController {
 
     }
     public void navigateToLoginFormOnAction(ActionEvent actionEvent) throws IOException {
-        URL resource = getClass().getResource("../view/LoginForm.fxml");
+        setUi("LoginForm");
+    }
+    private void setUi(String location) throws IOException {
+        URL resource = getClass().getResource("../view/"+location+".fxml");
         Stage stage = (Stage) context.getScene().getWindow();
         stage.centerOnScreen();
         stage.setScene(new Scene(FXMLLoader.load(resource)));
-        stage.setTitle("Login");
+        stage.setTitle(location);
     }
 }
