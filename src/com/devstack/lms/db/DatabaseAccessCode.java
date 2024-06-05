@@ -1,12 +1,14 @@
 package com.devstack.lms.db;
 
 import com.devstack.lms.model.Student;
+import com.devstack.lms.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseAccessCode {
+    //Student
     public boolean saveStudent(Student student) throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
@@ -97,5 +99,22 @@ public class DatabaseAccessCode {
             );
         }
         return null;
+    }
+
+    //user
+    public boolean signUp(User user) throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
+        String sql = "INSERT INTO user VALUES (?,?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, user.getUserId());
+        preparedStatement.setString(2, user.getUsername());
+        preparedStatement.setString(3, user.getPassword());
+
+        int affectedRowCount = preparedStatement.executeUpdate();
+        if(affectedRowCount>0){
+            return true;
+        }
+        return false;
     }
 }
