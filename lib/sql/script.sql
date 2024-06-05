@@ -18,3 +18,10 @@ CREATE TABLE IF NOT EXISTS user
     password TEXT,
     CONSTRAINT PRIMARY KEY (user_id)
 );
+CREATE TABLE IF NOT EXISTS course
+(
+    course_id VARCHAR(45),
+    course_name VARCHAR(45) UNIQUE NOT NULL,
+    fee DECIMAL(10,2),
+    CONSTRAINT PRIMARY KEY (course_id)
+);
