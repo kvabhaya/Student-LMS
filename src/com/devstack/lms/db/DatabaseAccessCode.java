@@ -12,30 +12,22 @@ import java.util.List;
 public class DatabaseAccessCode {
     //Student
     public boolean saveStudent(Student student) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
         String sql = "INSERT INTO student VALUES (?,?,?,?,?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1, student.getStudentId());
         preparedStatement.setString(2, student.getStudentName());
         preparedStatement.setString(3, student.getAddress());
         preparedStatement.setInt(4, student.getAge());
         preparedStatement.setString(5, student.getEmail());
 
-        int affectedRowCount = preparedStatement.executeUpdate();
-        if(affectedRowCount>0){
-            return true;
-        }
-        return false;
+        return preparedStatement.executeUpdate()>0;
+
     }
 
     public List<Student> findAllStudents(String searchText) throws ClassNotFoundException, SQLException {
         searchText="%"+searchText+"%";
-
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
         String sql = "SELECT * FROM student WHERE student_name LIKE ? OR email LIKE ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1,searchText);
         preparedStatement.setString(2,searchText);
 
@@ -58,18 +50,12 @@ public class DatabaseAccessCode {
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, id);
 
-        int affectedRowCount = preparedStatement.executeUpdate();
-        if(affectedRowCount>0){
-            return true;
-        }
-        return false;
+        return preparedStatement.executeUpdate()>0;
     }
 
     public boolean updateStudent(Student student) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
         String sql = "UPDATE student SET student_name=?, address=?, age=?, email=? WHERE student_id=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
         preparedStatement.setString(1, student.getStudentName());
         preparedStatement.setString(2, student.getAddress());
@@ -77,18 +63,12 @@ public class DatabaseAccessCode {
         preparedStatement.setString(4, student.getEmail());
         preparedStatement.setString(5, student.getStudentId());
 
-        int affectedRowCount = preparedStatement.executeUpdate();
-        if(affectedRowCount>0){
-            return true;
-        }
-        return false;
+        return preparedStatement.executeUpdate()>0;
     }
 
     public Student findStudent(String student_id) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
         String sql = "SELECT * FROM student WHERE student_id=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1,student_id);
 
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -105,26 +85,18 @@ public class DatabaseAccessCode {
 
     //user
     public boolean signUp(User user) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
         String sql = "INSERT INTO user VALUES (?,?,?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1, user.getUserId());
         preparedStatement.setString(2, user.getUsername());
         preparedStatement.setString(3, user.getPassword());
 
-        int affectedRowCount = preparedStatement.executeUpdate();
-        if(affectedRowCount>0){
-            return true;
-        }
-        return false;
+        return preparedStatement.executeUpdate()>0;
     }
 
     public boolean login(String username, String password) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
         String sql = "SELECT * FROM user WHERE username = '" + username +"' AND password = '" + password +"'";
-        Statement statement = connection.createStatement();
+        Statement statement = DbConnection.getInstance().getConnection().createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
 
         if(resultSet.next()){
@@ -135,27 +107,19 @@ public class DatabaseAccessCode {
 
     //course
     public boolean saveCourse(Course course) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
         String sql = "INSERT INTO course VALUES (?,?,?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1, course.getCourseId());
         preparedStatement.setString(2, course.getCourseName());
         preparedStatement.setDouble(3, course.getFee());
 
 
-        int affectedRowCount = preparedStatement.executeUpdate();
-        if(affectedRowCount>0){
-            return true;
-        }
-        return false;
+        return preparedStatement.executeUpdate()>0;
     }
 
     public List<Course> findAllCourses() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
         String sql = "SELECT * FROM course";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Course> courseList = new ArrayList<>();
@@ -170,10 +134,8 @@ public class DatabaseAccessCode {
     }
 
     public Course findCourse(String course_id) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
         String sql = "SELECT * FROM course WHERE course_id=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1,course_id);
 
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -190,10 +152,8 @@ public class DatabaseAccessCode {
 
     //Registration
     public boolean register(Registration registration) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
         String sql = "INSERT INTO registration VALUES (?,?,?,?,?,?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1, registration.getRegisterId());
         preparedStatement.setObject(2, registration.getDate());
         preparedStatement.setObject(3, registration.getNic());
@@ -202,10 +162,6 @@ public class DatabaseAccessCode {
         preparedStatement.setString(6, registration.getCourse());
 
 
-        int affectedRowCount = preparedStatement.executeUpdate();
-        if(affectedRowCount>0){
-            return true;
-        }
-        return false;
+        return preparedStatement.executeUpdate()>0;
     }
 }

@@ -40,10 +40,14 @@ public class RegisterFormController {
         loadAllCourses();
         loadAllStudents();
         cmbCourse.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->{
-            setCourseDetails(newValue);
+            if(newValue!=null){
+                setCourseDetails(newValue);
+            }
                 });
         cmbStudent.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->{
-            setStudentDetails(newValue);
+            if(newValue!=null){
+                setStudentDetails(newValue);
+            }
         });
     }
 
