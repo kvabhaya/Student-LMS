@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.Observable;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -102,7 +101,8 @@ public class RegisterFormController {
 
         try{
             DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
-            courseObList = FXCollections.observableArrayList(databaseAccessCode.findAllCourses()
+
+            courseObList = FXCollections.observableArrayList(databaseAccessCode.findAllCourses("")
                     .stream().map(e->e.getCourseId()+"|"+e.getCourseName()).collect(Collectors.toList()));
             cmbCourse.setItems(courseObList);
         }catch (Exception e){

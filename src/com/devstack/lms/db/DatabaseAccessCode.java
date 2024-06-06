@@ -44,10 +44,8 @@ public class DatabaseAccessCode {
     }
 
     public boolean deleteStudent(String id) throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
         String sql = "DELETE FROM student WHERE student_id=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
         preparedStatement.setString(1, id);
 
         return preparedStatement.executeUpdate()>0;
@@ -117,7 +115,7 @@ public class DatabaseAccessCode {
         return preparedStatement.executeUpdate()>0;
     }
 
-    public List<Course> findAllCourses() throws ClassNotFoundException, SQLException {
+    public List<Course> findAllCourses(String searchText) throws ClassNotFoundException, SQLException {
         String sql = "SELECT * FROM course";
         PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
@@ -150,6 +148,25 @@ public class DatabaseAccessCode {
         return null;
     }
 
+    public boolean deleteCourse(String courseId) throws SQLException, ClassNotFoundException {
+        String sql = "DELETE FROM course WHERE course_id=?";
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
+        preparedStatement.setString(1, courseId);
+
+        return preparedStatement.executeUpdate()>0;
+    }
+
+    public boolean updateCourse(Course course) throws ClassNotFoundException, SQLException {
+        String sql = "UPDATE course SET course_name=?, fee=? WHERE course_id=?";
+        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
+
+        preparedStatement.setString(1, course.getCourseName());
+        preparedStatement.setDouble(2, course.getFee());
+        preparedStatement.setString(3, course.getCourseId());
+
+        return preparedStatement.executeUpdate()>0;
+    }
+
     //Registration
     public boolean register(Registration registration) throws ClassNotFoundException, SQLException {
         String sql = "INSERT INTO registration VALUES (?,?,?,?,?,?)";
@@ -164,4 +181,6 @@ public class DatabaseAccessCode {
 
         return preparedStatement.executeUpdate()>0;
     }
+
+
 }
