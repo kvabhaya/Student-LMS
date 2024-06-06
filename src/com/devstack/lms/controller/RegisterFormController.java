@@ -111,13 +111,43 @@ public class RegisterFormController {
     }
 
     public void registerNowOnAction(ActionEvent actionEvent) {
-        Registration registration = new Registration(
-                UUID.randomUUID().toString(),
-                new Date(),
-                null,
-                rbtnCash.isSelected()?PaymentType.CASH:PaymentType.CARD,
-                selectedStudent.getStudentId(),
-                selectedCourse.getCourseId());
+        if(selectedCourse==null || selectedStudent==null){
+            new Alert(Alert.AlertType.WARNING, "Please return to home and come back...").show();
+            return;
+        }
+        try{
+            Registration registration = new Registration(
+                    UUID.randomUUID().toString(),
+                    new Date(),
+                    null,
+                    rbtnCash.isSelected()?PaymentType.CASH:PaymentType.CARD,
+                    selectedStudent.getStudentId(),
+                    selectedCourse.getCourseId());
+            DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
+            boolean isSaved = databaseAccessCode.register(registration);
+            if(isSaved){
+                new Alert(Alert.AlertType.INFORMATION,"Registration success...", ButtonType.CLOSE).show();
+                clearFields();
+            }else{
+                new Alert(Alert.AlertType.WARNING,"Try again...", ButtonType.CLOSE).show();
+            }
+
+        }catch(SQLException | ClassNotFoundException e){
+            new Alert(Alert.AlertType.ERROR,e.getMessage(), ButtonType.CLOSE).show();
+        }
+    }
+
+    private void clearFields() {
+        txtName.clear();
+        txtEmail.clear();
+        txtCourseFee.clear();
+        txtCourseName.clear();
+
+        cmbStudent.setValue(null);
+        cmbCourse.setValue(null);
+
+        selectedStudent=null;
+        selectedCourse=null;
     }
 
     private void setUi(String location) throws IOException {

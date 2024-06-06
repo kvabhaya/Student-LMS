@@ -1,6 +1,7 @@
 package com.devstack.lms.db;
 
 import com.devstack.lms.model.Course;
+import com.devstack.lms.model.Registration;
 import com.devstack.lms.model.Student;
 import com.devstack.lms.model.User;
 
@@ -185,5 +186,26 @@ public class DatabaseAccessCode {
             );
         }
         return null;
+    }
+
+    //Registration
+    public boolean register(Registration registration) throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/devstack_lms", "root", "1234");
+        String sql = "INSERT INTO registration VALUES (?,?,?,?,?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, registration.getRegisterId());
+        preparedStatement.setObject(2, registration.getDate());
+        preparedStatement.setObject(3, registration.getNic());
+        preparedStatement.setString(4, registration.getPaymentType().name());
+        preparedStatement.setString(5, registration.getStudent());
+        preparedStatement.setString(6, registration.getCourse());
+
+
+        int affectedRowCount = preparedStatement.executeUpdate();
+        if(affectedRowCount>0){
+            return true;
+        }
+        return false;
     }
 }
