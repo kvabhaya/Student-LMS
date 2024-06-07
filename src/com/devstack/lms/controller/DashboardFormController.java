@@ -27,6 +27,10 @@ public class DashboardFormController {
     public void btnOpenRegistrationOnAction(ActionEvent actionEvent) throws IOException {
         setUi("RegisterForm");
     }
+
+    public void btnOpenAllRegistrationFormOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("AllRegistrationForm");
+    }
     private void setUi(String location) throws IOException {
         URL resource = getClass().getResource("../view/"+location+".fxml");
         Stage stage = (Stage) context.getScene().getWindow();

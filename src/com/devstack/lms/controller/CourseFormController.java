@@ -105,16 +105,6 @@ public class CourseFormController {
         }
     }
 
-    public void btnNewCourseOnAction(ActionEvent actionEvent){
-        btnSave.setText("Save Course");
-        clearFields();
-        selectedCourse=null;
-    }
-
-    public void btnBachToHomeOnAction(ActionEvent actionEvent) throws IOException {
-        setUi("DashboardForm");
-    }
-
     public void saveCourseOnAction(ActionEvent actionEvent){
         if(btnSave.getText().equalsIgnoreCase("Save Course")){
             try{
@@ -128,6 +118,7 @@ public class CourseFormController {
                 if(isSaved){
                     new Alert(Alert.AlertType.INFORMATION,"Course has been saved...", ButtonType.CLOSE).show();
                     clearFields();
+                    loadAllCourses();
                 }else{
                     new Alert(Alert.AlertType.WARNING,"Try again...", ButtonType.CLOSE).show();
                 }
@@ -158,7 +149,7 @@ public class CourseFormController {
                     new Alert(Alert.AlertType.ERROR,e.getMessage(), ButtonType.CLOSE).show();
                 }
             }else{
-                new Alert(Alert.AlertType.ERROR,"Select a student", ButtonType.CLOSE).show();
+                new Alert(Alert.AlertType.ERROR,"Select a course", ButtonType.CLOSE).show();
             }
         }
     }
@@ -166,6 +157,16 @@ public class CourseFormController {
     private void clearFields() {
         txtCourseName.clear();
         txtCourseFee.clear();
+    }
+
+    public void btnNewCourseOnAction(ActionEvent actionEvent){
+        btnSave.setText("Save Course");
+        clearFields();
+        selectedCourse=null;
+    }
+
+    public void btnBachToHomeOnAction(ActionEvent actionEvent) throws IOException {
+        setUi("DashboardForm");
     }
 
     private void setUi(String location) throws IOException {
