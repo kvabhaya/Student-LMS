@@ -1,52 +1,41 @@
 package com.devstack.lms.model;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 public class AllRegistrations {
-    private StringProperty registeredDate;
-    private StringProperty studentName;
-    private StringProperty paymentType;
+    private String registered_date;
+    private String studentName;
+    private String paymentType;
 
-    public AllRegistrations(String registeredDate, String studentName, String paymentType) {
-        this.registeredDate = new SimpleStringProperty(registeredDate);
-        this.studentName = new SimpleStringProperty(studentName);
-        this.paymentType = new SimpleStringProperty(paymentType);
+    public AllRegistrations() {
     }
 
-    public String getRegisteredDate() {
-        return registeredDate.get();
+    public AllRegistrations(String registered_date, String studentName, String paymentType) {
+        this.registered_date = registered_date;
+        this.studentName = studentName;
+        this.paymentType = paymentType;
     }
 
-    public void setRegisteredDate(String registeredDate) {
-        this.registeredDate.set(registeredDate);
+    public String getRegistered_date() {
+        return registered_date;
     }
 
-    public StringProperty registeredDateProperty() {
-        return registeredDate;
+    public void setRegistered_date(String registered_date) {
+        this.registered_date = registered_date;
     }
 
     public String getStudentName() {
-        return studentName.get();
-    }
-
-    public void setStudentName(String studentName) {
-        this.studentName.set(studentName);
-    }
-
-    public StringProperty studentNameProperty() {
         return studentName;
     }
 
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
     public String getPaymentType() {
-        return paymentType.get();
+        return paymentType;
     }
 
     public void setPaymentType(String paymentType) {
-        this.paymentType.set(paymentType);
-    }
-
-    public StringProperty paymentTypeProperty() {
-        return paymentType;
+        this.paymentType = paymentType;
     }
 }

@@ -6,8 +6,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -26,14 +28,34 @@ public class AllRegistrationFormController {
     public ComboBox<String> cmbSelectCourse;
 
     public void initialize() {
-        loadAllCourses();
 
-        colDate.setCellValueFactory(data -> data.getValue().registeredDateProperty());
-        colStudentName.setCellValueFactory(data -> data.getValue().studentNameProperty());
-        colPayment.setCellValueFactory(data -> data.getValue().paymentTypeProperty());
+        colDate.setCellValueFactory((new PropertyValueFactory<>("registered_date")));
+        colStudentName.setCellValueFactory((new PropertyValueFactory<>("studentName")));
+        colPayment.setCellValueFactory((new PropertyValueFactory<>("paymentType")));
+        loadAllCourses();
+        tblCourses.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                showRegistrationDetailForm(newSelection);
+            }
+        });
+
     }
 
-    private void setCourseDetails(Object newValue) {
+    private void showRegistrationDetailForm(AllRegistrations newSelection) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/RegistrationDetailForm.fxml"));
+            Parent root = loader.load();
+
+//            RegistrationDetailFormController controller = loader.getController();
+//            controller.initData(registration);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Registration Detail");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     ObservableList<String> courseObList = null;
