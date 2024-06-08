@@ -200,4 +200,7 @@ public class DatabaseAccessCode {
         return registrationList;
     }
 
+    //Registration Detail
+
+
 }

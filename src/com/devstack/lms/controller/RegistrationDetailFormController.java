@@ -8,4 +8,8 @@ public class RegistrationDetailFormController {
     public TextField StudentName;
     public TextField studentEmail;
     public TextField registeredDate;
+
+
+
+
 }
