@@ -1,7 +1,7 @@
 package com.devstack.lms.controller;
 
 import com.devstack.lms.db.DatabaseAccessCode;
-import com.devstack.lms.model.AllRegistrations;
+import com.devstack.lms.entity.AllRegistrations;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

@@ -1,9 +1,8 @@
 package com.devstack.lms.controller;
 
 import com.devstack.lms.db.DatabaseAccessCode;
-import com.devstack.lms.model.Student;
+import com.devstack.lms.entity.Student;
 import com.devstack.lms.view.TM.StudentTM;
-import javafx.beans.value.ObservableLongValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

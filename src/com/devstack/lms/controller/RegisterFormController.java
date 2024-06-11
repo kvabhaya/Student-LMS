@@ -1,9 +1,9 @@
 package com.devstack.lms.controller;
 
 import com.devstack.lms.db.DatabaseAccessCode;
-import com.devstack.lms.model.Course;
-import com.devstack.lms.model.Registration;
-import com.devstack.lms.model.Student;
+import com.devstack.lms.entity.Course;
+import com.devstack.lms.entity.Registration;
+import com.devstack.lms.entity.Student;
 import com.devstack.lms.util.PaymentType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
