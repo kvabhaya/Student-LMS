@@ -8,15 +8,9 @@ import java.util.List;
 
 public class DatabaseAccessCode {
     //Student
-
     //user
-
     //course
-
-
     //Registration
-
-
     //All Registration
     public List<AllRegistrations> loadAllDetails(String courseId) throws ClassNotFoundException, SQLException {
         String sql = "SELECT r.registered_date, s.student_name, r.paymentType " +
@@ -37,7 +31,6 @@ public class DatabaseAccessCode {
         }
         return registrationList;
     }
-
     //Registration Detail
 
 

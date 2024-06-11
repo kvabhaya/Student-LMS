@@ -1,5 +1,6 @@
 package com.devstack.lms.dao.custom.impl;
 
+import com.devstack.lms.dao.CrudUtil;
 import com.devstack.lms.dao.custom.StudentDao;
 import com.devstack.lms.db.DbConnection;
 import com.devstack.lms.entity.Student;
@@ -14,24 +15,18 @@ import java.util.List;
 public class StudentDaoImpl implements StudentDao {
     @Override
     public boolean create(Student student) throws SQLException, ClassNotFoundException {
-        String sql = "INSERT INTO student VALUES (?,?,?,?,?)";
-        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
-        preparedStatement.setString(1, student.getStudentId());
-        preparedStatement.setString(2, student.getStudentName());
-        preparedStatement.setString(3, student.getAddress());
-        preparedStatement.setInt(4, student.getAge());
-        preparedStatement.setString(5, student.getEmail());
-
-        return preparedStatement.executeUpdate()>0;
+        return CrudUtil.execute("INSERT INTO student VALUES (?,?,?,?,?)",
+                student.getStudentId(),
+                student.getStudentName(),
+                student.getAddress(),
+                student.getAge(),
+                student.getEmail());
     }
 
     @Override
     public Student find(String s) throws SQLException, ClassNotFoundException {
-        String sql = "SELECT * FROM student WHERE student_id=?";
-        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
-        preparedStatement.setString(1,s);
 
-        ResultSet resultSet = preparedStatement.executeQuery();
+        ResultSet resultSet = CrudUtil.execute("SELECT * FROM student WHERE student_id=?",s);
 
         if(resultSet.next()){
             return new Student(
@@ -45,30 +40,19 @@ public class StudentDaoImpl implements StudentDao {
         return null;
     }
 
-
     @Override
     public boolean update(Student student) throws SQLException, ClassNotFoundException {
-
-        String sql = "UPDATE student SET student_name=?, address=?, age=?, email=? WHERE student_id=?";
-        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
-
-        preparedStatement.setString(1, student.getStudentName());
-        preparedStatement.setString(2, student.getAddress());
-        preparedStatement.setInt(3, student.getAge());
-        preparedStatement.setString(4, student.getEmail());
-        preparedStatement.setString(5, student.getStudentId());
-
-        return preparedStatement.executeUpdate()>0;
-
+        return CrudUtil.execute("UPDATE student SET student_name=?, address=?, age=?, email=? WHERE student_id=?",
+                student.getStudentName(),
+                student.getAddress(),
+                student.getAge(),
+                student.getEmail(),
+                student.getStudentId());
     }
 
     @Override
     public boolean delete(String s) throws SQLException, ClassNotFoundException {
-        String sql = "DELETE FROM student WHERE student_id=?";
-        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
-        preparedStatement.setString(1, s);
-
-        return preparedStatement.executeUpdate()>0;
+        return CrudUtil.execute("DELETE FROM student WHERE student_id=?",s);
 
     }
 
@@ -80,12 +64,9 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public List<Student> search(String searchText) throws SQLException, ClassNotFoundException {
         searchText="%"+searchText+"%";
-        String sql = "SELECT * FROM student WHERE student_name LIKE ? OR email LIKE ?";
-        PreparedStatement preparedStatement = DbConnection.getInstance().getConnection().prepareStatement(sql);
-        preparedStatement.setString(1,searchText);
-        preparedStatement.setString(2,searchText);
+        ResultSet resultSet = CrudUtil.execute("SELECT * FROM student WHERE student_name LIKE ? OR email LIKE ?",
+                searchText,searchText);
 
-        ResultSet resultSet = preparedStatement.executeQuery();
         List<Student> studentList=new ArrayList<>();
         while(resultSet.next()){
             studentList.add(new Student(
