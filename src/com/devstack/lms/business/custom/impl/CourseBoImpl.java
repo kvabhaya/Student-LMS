@@ -16,9 +16,7 @@ public class CourseBoImpl implements CourseBo {
     private final CourseDao courseDao = new CourseDaoImpl();
     @Override
     public boolean create(CourseDto dto) throws SQLException, ClassNotFoundException {
-        return courseDao.create(
-                new Course(dto.getCourseId(), dto.getCourseName(), dto.getFee())
-        );
+        return courseDao.create(toCourse(dto));
     }
 
     @Override
@@ -32,9 +30,7 @@ public class CourseBoImpl implements CourseBo {
 
     @Override
     public boolean update(CourseDto dto) throws SQLException, ClassNotFoundException {
-        return courseDao.update(
-                new Course(dto.getCourseId(), dto.getCourseName(), dto.getFee())
-        );
+        return courseDao.update(toCourse(dto));
     }
 
     @Override
@@ -53,5 +49,8 @@ public class CourseBoImpl implements CourseBo {
     }
     private CourseDto toCourseDto(Course c){
         return new CourseDto(c.getCourseId(), c.getCourseName(), c.getFee());
+    }
+    private Course toCourse(CourseDto c){
+        return new Course(c.getCourseId(), c.getCourseName(), c.getFee());
     }
 }
