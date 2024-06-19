@@ -66,7 +66,7 @@ public class RegisterFormController {
         String[] splitData = newValue.split("\\|");
         String studentId = splitData[0].trim();
         try{
-            selectedStudent = StudentBo.find(studentId);
+            selectedStudent = studentBo.find(studentId);
             if(selectedStudent==null){
                 new Alert(Alert.AlertType.WARNING,"Student not found...");
                 return;
@@ -81,7 +81,7 @@ public class RegisterFormController {
     ObservableList<String> studentObList = null;
     private void loadAllStudents() {
         try{
-            studentObList = FXCollections.observableArrayList(StudentBo.findAll()
+            studentObList = FXCollections.observableArrayList(studentBo.findAll()
                     .stream().map(e->e.getStudentId()+"|"+e.getStudentName()).collect(Collectors.toList()));
             cmbStudent.setItems(studentObList);
         }catch (Exception e){
@@ -109,7 +109,7 @@ public class RegisterFormController {
     private void loadAllCourses() {
 
         try{
-            courseObList = FXCollections.observableArrayList(CourseBo.findAll()
+            courseObList = FXCollections.observableArrayList(courseBo.findAll()
                     .stream().map(e->e.getCourseId()+"|"+e.getCourseName()).collect(Collectors.toList()));
             cmbCourse.setItems(courseObList);
         }catch (Exception e){

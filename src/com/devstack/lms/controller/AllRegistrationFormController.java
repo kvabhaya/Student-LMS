@@ -32,13 +32,12 @@ public class AllRegistrationFormController {
         colDate.setCellValueFactory((new PropertyValueFactory<>("registered_date")));
         colStudentName.setCellValueFactory((new PropertyValueFactory<>("studentName")));
         colPayment.setCellValueFactory((new PropertyValueFactory<>("paymentType")));
-        loadAllCourses();
+//        loadAllCourses();
         tblCourses.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 showRegistrationDetailForm(newSelection);
             }
         });
-
     }
 
     private void showRegistrationDetailForm(AllRegistrations newSelection) {
@@ -60,16 +59,16 @@ public class AllRegistrationFormController {
 
     ObservableList<String> courseObList = null;
 
-    private void loadAllCourses() {
-        try {
-            DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
-            courseObList = FXCollections.observableArrayList(databaseAccessCode.findAllCourses("")
-                    .stream().map(e -> e.getCourseId() + "|" + e.getCourseName()).collect(Collectors.toList()));
-            cmbSelectCourse.setItems(courseObList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private void loadAllCourses() {
+//        try {
+//            DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
+//            courseObList = FXCollections.observableArrayList(databaseAccessCode.findAllCourses("")
+//                    .stream().map(e -> e.getCourseId() + "|" + e.getCourseName()).collect(Collectors.toList()));
+//            cmbSelectCourse.setItems(courseObList);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public void btnBachToHomeOnAction(ActionEvent actionEvent) throws IOException {
         URL resource = getClass().getResource("../view/DashboardForm.fxml");
