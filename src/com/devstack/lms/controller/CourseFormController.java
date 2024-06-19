@@ -1,6 +1,9 @@
 package com.devstack.lms.controller;
 
+import com.devstack.lms.business.BoFactory;
+import com.devstack.lms.business.custom.CourseBo;
 import com.devstack.lms.db.DatabaseAccessCode;
+import com.devstack.lms.dto.CourseDto;
 import com.devstack.lms.entity.Course;
 import com.devstack.lms.view.TM.CourseTM;
 import javafx.collections.FXCollections;
@@ -34,6 +37,8 @@ public class CourseFormController {
     private String searchText="";
     private Course selectedCourse=null;
 
+    private final CourseBo courseBo = BoFactory.getBo(BoFactory.BoType.COURSE);
+
     public void initialize(){
         colCourseName.setCellValueFactory(new PropertyValueFactory<>("course_name"));
         colCourseFee.setCellValueFactory(new PropertyValueFactory<>("fee"));
@@ -48,71 +53,64 @@ public class CourseFormController {
 
     private void loadAllCourses() {
         ObservableList<CourseTM> tmObservableList = FXCollections.observableArrayList();
-        try{
-            DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
-            List<Course> allCourses = databaseAccessCode.findAllCourses(searchText);
+        List<Course> allCourses = courseBo.search(searchText);
 
-            for(Course c:allCourses){
+        for(Course c:allCourses){
 
-                ButtonBar bar = new ButtonBar();
-                Button deleteButton = new Button("Delete");
-                Button updateButton = new Button("Update");
-                bar.getButtons().addAll(deleteButton,updateButton);
+            ButtonBar bar = new ButtonBar();
+            Button deleteButton = new Button("Delete");
+            Button updateButton = new Button("Update");
+            bar.getButtons().addAll(deleteButton,updateButton);
 
-                CourseTM tm = new CourseTM(
-                        c.getCourseId(),
-                        c.getCourseName(),
-                        c.getFee(),
-                        bar
-                );
+            CourseTM tm = new CourseTM(
+                    c.getCourseId(),
+                    c.getCourseName(),
+                    c.getFee(),
+                    bar
+            );
 
-                deleteButton.setOnAction(event -> {
+            deleteButton.setOnAction(event -> {
 
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure?", ButtonType.NO, ButtonType.YES);
-                    Optional<ButtonType> buttonType = alert.showAndWait();
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure?", ButtonType.NO, ButtonType.YES);
+                Optional<ButtonType> buttonType = alert.showAndWait();
 
-                    if(buttonType.get()==ButtonType.YES){
-                        try{
-                            DatabaseAccessCode dbAccessCode = new DatabaseAccessCode();
-                            boolean isDeleted = dbAccessCode.deleteCourse(tm.getCourse_id());
-                            if(isDeleted){
-                                new Alert(Alert.AlertType.INFORMATION,"Course has been deleted...", ButtonType.CLOSE).show();
-                                loadAllCourses();
-                            }else{
-                                new Alert(Alert.AlertType.WARNING,"Something went wrong. Try again...", ButtonType.CLOSE).show();
-                            }
-                        }catch(SQLException | ClassNotFoundException e){
-                            new Alert(Alert.AlertType.ERROR, e.getMessage(),ButtonType.CLOSE).show();
+                if(buttonType.get()==ButtonType.YES){
+                    try{
+                        boolean isDeleted = courseBo.delete(tm.getCourse_id());
+                        if(isDeleted){
+                            new Alert(Alert.AlertType.INFORMATION,"Course has been deleted...", ButtonType.CLOSE).show();
+                            loadAllCourses();
+                        }else{
+                            new Alert(Alert.AlertType.WARNING,"Something went wrong. Try again...", ButtonType.CLOSE).show();
                         }
+                    }catch(SQLException | ClassNotFoundException e){
+                        new Alert(Alert.AlertType.ERROR, e.getMessage(),ButtonType.CLOSE).show();
                     }
-                });
+                }
+            });
 
-                updateButton.setOnAction(event -> {
-                    btnSave.setText("Update Course");
-                    selectedCourse = c;
+            updateButton.setOnAction(event -> {
+                btnSave.setText("Update Course");
+                selectedCourse = c;
 
-                    txtCourseName.setText(c.getCourseName());
-                    txtCourseFee.setText(String.valueOf(c.getFee()));
-                });
+                txtCourseName.setText(c.getCourseName());
+                txtCourseFee.setText(String.valueOf(c.getFee()));
+            });
 
-                tmObservableList.add(tm);
-            }
-            tblCourses.setItems(tmObservableList);
-        }catch(SQLException | ClassNotFoundException e){
-            new Alert(Alert.AlertType.ERROR, e.getMessage(),ButtonType.CLOSE).show();
+            tmObservableList.add(tm);
         }
+        tblCourses.setItems(tmObservableList);
     }
 
     public void saveCourseOnAction(ActionEvent actionEvent){
         if(btnSave.getText().equalsIgnoreCase("Save Course")){
             try{
-                Course course = new Course(
+                CourseDto course = new CourseDto(
                         UUID.randomUUID().toString(),
                         txtCourseName.getText().trim(),
                         Double.parseDouble(txtCourseFee.getText())
                 );
-                DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
-                boolean isSaved = databaseAccessCode.saveCourse(course);
+                boolean isSaved = courseBo.create(course);
                 if(isSaved){
                     new Alert(Alert.AlertType.INFORMATION,"Course has been saved...", ButtonType.CLOSE).show();
                     clearFields();
@@ -127,13 +125,12 @@ public class CourseFormController {
         }else {
             if(selectedCourse != null){
                 try{
-                    Course course = new Course(
+                    CourseDto course = new CourseDto(
                             UUID.randomUUID().toString(),
                             txtCourseName.getText().trim(),
                             Double.parseDouble(txtCourseFee.getText())
                     );
-                    DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
-                    boolean isSaved = databaseAccessCode.updateCourse(course);
+                    boolean isSaved = courseBo.update(course);
                     if(isSaved){
                         new Alert(Alert.AlertType.INFORMATION,"Course has been updated...", ButtonType.CLOSE).show();
                         clearFields();

@@ -16,5 +16,6 @@
       <Button layoutX="197.0" layoutY="71.0" mnemonicParsing="false" onAction="#btnOpenCourseFormOnAction" prefHeight="85.0" prefWidth="152.0" text="Course Management" />
       <Button layoutX="369.0" layoutY="71.0" mnemonicParsing="false" onAction="#btnOpenRegistrationOnAction" prefHeight="85.0" prefWidth="152.0" text="New Registration" />
       <Button layoutX="538.0" layoutY="71.0" mnemonicParsing="false" onAction="#btnOpenAllRegistrationFormOnAction" prefHeight="85.0" prefWidth="152.0" text="All Registrations" />
+      <Button layoutX="282.0" layoutY="342.0" mnemonicParsing="false" onAction="#makeDumpFileOnAction" prefHeight="85.0" prefWidth="152.0" text="BackUp Now" />
    </children>
 </AnchorPane>

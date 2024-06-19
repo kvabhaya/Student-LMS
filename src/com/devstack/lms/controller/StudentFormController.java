@@ -1,6 +1,9 @@
 package com.devstack.lms.controller;
 
+import com.devstack.lms.business.BoFactory;
+import com.devstack.lms.business.custom.StudentBo;
 import com.devstack.lms.db.DatabaseAccessCode;
+import com.devstack.lms.dto.StudentDto;
 import com.devstack.lms.entity.Student;
 import com.devstack.lms.view.TM.StudentTM;
 import javafx.collections.FXCollections;
@@ -37,7 +40,9 @@ public class StudentFormController {
     public AnchorPane context;
 
     private String searchText="";
-    private Student selectedStudent=null;
+    private StudentDto selectedStudent=null;
+
+    private final StudentBo studentBo = BoFactory.getBo(BoFactory.BoType.STUDENT);
 
     public void initialize(){
         colName.setCellValueFactory(new PropertyValueFactory<>("studentName"));
@@ -56,10 +61,9 @@ public class StudentFormController {
     private void loadAllStudents() {
         ObservableList<StudentTM> tmObservableList = FXCollections.observableArrayList();
         try{
-            DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
-            List<Student> allStudents = databaseAccessCode.findAllStudents(searchText);
+            List<StudentDto> allStudents = studentBo.search(searchText);
 
-            for(Student s:allStudents){
+            for(StudentDto s:allStudents){
 
                 ButtonBar bar = new ButtonBar();
                 Button deleteButton = new Button("Delete");
@@ -82,8 +86,7 @@ public class StudentFormController {
 
                     if(buttonType.get()==ButtonType.YES){
                         try{
-                            DatabaseAccessCode dbAccessCode = new DatabaseAccessCode();
-                            boolean isDeleted = dbAccessCode.deleteStudent(tm.getStudentId());
+                            boolean isDeleted = studentBo.delete(tm.getStudentId());
                             if(isDeleted){
                                 new Alert(Alert.AlertType.INFORMATION,"Student has been deleted...", ButtonType.CLOSE).show();
                                 loadAllStudents();
@@ -117,15 +120,14 @@ public class StudentFormController {
     public void saveStudentOnAction(ActionEvent actionEvent) {
         if(btnSave.getText().equalsIgnoreCase("Save Student")){
             try{
-                Student student = new Student(
+                StudentDto student = new StudentDto(
                         UUID.randomUUID().toString(),
                         txtName.getText().trim(),
                         txtAddress.getText().trim(),
                         txtEmail.getText().toLowerCase().trim(),
                         Integer.parseInt(txtAge.getText())
                 );
-                DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
-                boolean isSaved = databaseAccessCode.saveStudent(student);
+                boolean isSaved = studentBo.create(student);
                 if(isSaved){
                     new Alert(Alert.AlertType.INFORMATION,"Student has been saved...", ButtonType.CLOSE).show();
                     clearFields();
@@ -140,15 +142,14 @@ public class StudentFormController {
         }else{
             if(selectedStudent != null){
                 try{
-                    Student student = new Student(
+                    StudentDto student = new StudentDto(
                             selectedStudent.getStudentId(),
                             txtName.getText().trim(),
                             txtAddress.getText().trim(),
                             txtEmail.getText().toLowerCase().trim(),
                             Integer.parseInt(txtAge.getText())
                     );
-                    DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
-                    boolean isSaved = databaseAccessCode.updateStudent(student);
+                    boolean isSaved = studentBo.update(student);
                     if(isSaved){
                         new Alert(Alert.AlertType.INFORMATION,"Student has been updated...", ButtonType.CLOSE).show();
                         clearFields();
@@ -187,5 +188,9 @@ public class StudentFormController {
         stage.centerOnScreen();
         stage.setScene(new Scene(FXMLLoader.load(resource)));
         stage.setTitle("Dashboard Form");
+    }
+
+    public void printAllOnAction(ActionEvent actionEvent) {
+
     }
 }

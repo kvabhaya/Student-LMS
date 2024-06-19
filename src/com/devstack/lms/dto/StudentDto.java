@@ -7,12 +7,12 @@ public class StudentDto {
     private String email;
     private int age;
 
-    public StudentDto(String studentId, String studentName, String address, int age, String email) {
+    public StudentDto(String studentId, String studentName, String address, String email, int age) {
         this.studentId = studentId;
         this.studentName = studentName;
         this.address = address;
-        this.age = age;
         this.email = email;
+        this.age = age;
     }
 
     public String getStudentId() {

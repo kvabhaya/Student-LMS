@@ -1,6 +1,9 @@
 package com.devstack.lms.controller;
 
+import com.devstack.lms.business.BoFactory;
+import com.devstack.lms.business.custom.UserBo;
 import com.devstack.lms.db.DatabaseAccessCode;
+import com.devstack.lms.dto.UserDto;
 import com.devstack.lms.entity.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -21,15 +24,16 @@ public class SignupFormController {
     public TextField txtUsername;
     public PasswordField txtPassword;
 
+    private final UserBo userBo = BoFactory.getBo(BoFactory.BoType.USER);
+
     public void createNewAccountOnAction(ActionEvent actionEvent) {
-        User user = new User(
+        UserDto user = new UserDto(
                 UUID.randomUUID().toString(),
                 txtUsername.getText(),
                 txtPassword.getText()
         );
-        DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
         try{
-            boolean isSaved = databaseAccessCode.signUp(user);
+            boolean isSaved = userBo.create(user);
             if (isSaved){
                 new Alert(Alert.AlertType.INFORMATION,"Signup Done").show();
                 setUi("LoginForm");
@@ -43,9 +47,11 @@ public class SignupFormController {
         }
 
     }
+
     public void navigateToLoginFormOnAction(ActionEvent actionEvent) throws IOException {
         setUi("LoginForm");
     }
+
     private void setUi(String location) throws IOException {
         URL resource = getClass().getResource("../view/"+location+".fxml");
         Stage stage = (Stage) context.getScene().getWindow();

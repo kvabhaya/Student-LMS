@@ -1,5 +1,7 @@
 package com.devstack.lms.controller;
 
+import com.devstack.lms.business.BoFactory;
+import com.devstack.lms.business.custom.UserBo;
 import com.devstack.lms.db.DatabaseAccessCode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -20,10 +22,12 @@ public class LoginFormController {
     public TextField txtUsername;
     public PasswordField txtPassword;
 
+    private final UserBo userBo = BoFactory.getBo(BoFactory.BoType.USER);
+
     public void openDashboardOnAction(ActionEvent actionEvent) throws IOException {
-        DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
+//        DatabaseAccessCode databaseAccessCode = new DatabaseAccessCode();
         try {
-            boolean islogedIn = databaseAccessCode.login(
+            boolean islogedIn = userBo.login(
                     txtUsername.getText(),
                     txtPassword.getText()
             );

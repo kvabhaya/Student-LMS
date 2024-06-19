@@ -1,6 +1,7 @@
 package com.devstack.lms.business.custom.impl;
 
 import com.devstack.lms.business.custom.CourseBo;
+import com.devstack.lms.dao.DaoFactory;
 import com.devstack.lms.dao.custom.CourseDao;
 import com.devstack.lms.dao.custom.impl.CourseDaoImpl;
 import com.devstack.lms.dto.CourseDto;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CourseBoImpl implements CourseBo {
-    private final CourseDao courseDao = new CourseDaoImpl();
+    private final CourseDao courseDao = DaoFactory.getDao(DaoFactory.DaoType.COURSE);
     @Override
     public boolean create(CourseDto dto) throws SQLException, ClassNotFoundException {
         return courseDao.create(toCourse(dto));
@@ -47,6 +48,12 @@ public class CourseBoImpl implements CourseBo {
 //        }
         return courseDao.findAll().stream().map(this::toCourseDto).collect(Collectors.toList());
     }
+
+    @Override
+    public List<Course> search(String searchText) {
+        return Collections.emptyList();
+    }
+
     private CourseDto toCourseDto(Course c){
         return new CourseDto(c.getCourseId(), c.getCourseName(), c.getFee());
     }
