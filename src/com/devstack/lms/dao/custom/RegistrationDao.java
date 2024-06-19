@@ -4,5 +4,5 @@ import com.devstack.lms.dao.CrudDao;
 import com.devstack.lms.dao.SuperDao;
 import com.devstack.lms.entity.Registration;
 
-public interface RegistrationDao extends CrudDao<Registration, String>, SuperDao {
+public interface RegistrationDao extends CrudDao<Registration, String> {
 }

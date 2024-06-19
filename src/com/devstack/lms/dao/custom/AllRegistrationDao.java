@@ -8,6 +8,6 @@ import com.devstack.lms.entity.Course;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface AllRegistrationDao extends CrudDao<AllRegistrations, String>, SuperDao {
+public interface AllRegistrationDao extends CrudDao<AllRegistrations, String>{
 
 }

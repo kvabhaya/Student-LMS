@@ -4,5 +4,5 @@ import com.devstack.lms.dao.CrudDao;
 import com.devstack.lms.dao.SuperDao;
 import com.devstack.lms.entity.Course;
 
-public interface CourseDao extends CrudDao<Course, String>, SuperDao {
+public interface CourseDao extends CrudDao<Course, String> {
 }
