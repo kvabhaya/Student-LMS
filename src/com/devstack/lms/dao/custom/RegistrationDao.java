@@ -1,7 +1,8 @@
 package com.devstack.lms.dao.custom;
 
 import com.devstack.lms.dao.CrudDao;
+import com.devstack.lms.dao.SuperDao;
 import com.devstack.lms.entity.Registration;
 
-public interface RegistrationDao extends CrudDao<Registration, String> {
+public interface RegistrationDao extends CrudDao<Registration, String>, SuperDao {
 }
