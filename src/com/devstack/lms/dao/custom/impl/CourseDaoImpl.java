@@ -4,6 +4,7 @@ import com.devstack.lms.dao.CrudUtil;
 import com.devstack.lms.dao.custom.CourseDao;
 import com.devstack.lms.db.DbConnection;
 import com.devstack.lms.entity.Course;
+import com.devstack.lms.entity.Student;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,9 +22,9 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public Course find(String s) throws SQLException, ClassNotFoundException {
+    public Course find(String c) throws SQLException, ClassNotFoundException {
 
-        ResultSet resultSet = CrudUtil.execute("SELECT * FROM course WHERE course_id=?",s);
+        ResultSet resultSet = CrudUtil.execute("SELECT * FROM course WHERE course_id=?",c);
 
         if(resultSet.next()){
             return new Course(
@@ -42,14 +43,34 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public boolean delete(String s) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute("DELETE FROM course WHERE course_id=?",s);
+    public boolean delete(String c) throws SQLException, ClassNotFoundException {
+        return CrudUtil.execute("DELETE FROM course WHERE course_id=?",c);
     }
 
     @Override
-    public List<Course> findAll() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = CrudUtil.execute("SELECT * FROM course");
-        List<Course> courseList = new ArrayList<>();
+    public List<Course> findAll() {
+        return Collections.emptyList();
+    }
+//    public List<Course> findAll() throws SQLException, ClassNotFoundException {
+//        ResultSet resultSet = CrudUtil.execute("SELECT * FROM course");
+//        List<Course> courseList = new ArrayList<>();
+//        while(resultSet.next()){
+//            courseList.add(new Course(
+//                    resultSet.getString(1),
+//                    resultSet.getString(2),
+//                    resultSet.getDouble(3)
+//            ));
+//        }
+//        return courseList;
+//    }
+
+    @Override
+    public List<Course> search(String searchText) throws SQLException, ClassNotFoundException {
+        searchText="%"+searchText+"%";
+        ResultSet resultSet = CrudUtil.execute("SELECT * FROM course WHERE course_name LIKE ?",
+                searchText,searchText);
+
+        List<Course> courseList=new ArrayList<>();
         while(resultSet.next()){
             courseList.add(new Course(
                     resultSet.getString(1),

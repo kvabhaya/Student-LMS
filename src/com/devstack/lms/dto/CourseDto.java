@@ -5,8 +5,6 @@ public class CourseDto {
     private String courseName;
     private double fee;
 
-    public CourseDto() {
-    }
 
     public CourseDto(String courseId, String courseName, double fee) {
         this.courseId = courseId;

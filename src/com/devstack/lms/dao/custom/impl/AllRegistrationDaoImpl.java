@@ -32,4 +32,9 @@ public class AllRegistrationDaoImpl implements CourseDao {
     public List<Course> findAll() throws SQLException, ClassNotFoundException {
         return Collections.emptyList();
     }
+
+    @Override
+    public List<Course> search(String searchText) throws SQLException, ClassNotFoundException {
+        return Collections.emptyList();
+    }
 }
